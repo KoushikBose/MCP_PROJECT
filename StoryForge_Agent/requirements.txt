@@ -1,0 +1,5 @@
+python-dotenv
+streamlit
+tavily-python
+huggingface_hub
+mcp
