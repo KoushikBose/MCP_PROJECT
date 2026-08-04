@@ -11,3 +11,6 @@ wheels/
 
 # Environment variables
 .env
+
+# Local Claude Code settings (may contain command history with secrets)
+.claude/
