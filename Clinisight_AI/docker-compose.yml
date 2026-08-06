@@ -11,13 +11,13 @@ services:
   api:
     <<: *app
     container_name: clinisight-api
-    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8081", "--workers", "2"]
+    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8084", "--workers", "2"]
     ports:
       - "8081:8081"
     volumes:
       - clinisight_cache:/app/.cache/clinisight
     healthcheck:
-      test: ["CMD", "curl", "-fsS", "http://localhost:8081/"]
+      test: ["CMD", "curl", "-fsS", "http://localhost:8084/"]
       interval: 30s
       timeout: 5s
       retries: 3
