@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from functions.symptom_extractor import extract_symptoms
 from functions.diagnosis_symptoms import get_diagnosis
@@ -6,6 +6,7 @@ from functions.pubmed_articles import fetch_pubmed_articles_with_metadata
 from functions.summarizer_pubmed import summarize_text
 from functions.web_search import fetch_web_results
 from functions.cache_store import cache_stats, clear_cache, get_cached, set_cached
+from functions.guardrails import GuardrailBlocked
 
 app=FastAPI()
 
@@ -33,7 +34,10 @@ def diagnosis(data:SymtomInput):
     if diagnosis_result is not None:
         cache_hits["diagnosis"] = True
     else:
-        diagnosis_result = get_diagnosis(data.description, symptom)
+        try:
+            diagnosis_result = get_diagnosis(data.description, symptom)
+        except GuardrailBlocked as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
         set_cached("diagnosis", symptom_key, data.description, value=diagnosis_result)
 
     pubmed_query = " ".join(symptom)
@@ -49,7 +53,10 @@ def diagnosis(data:SymtomInput):
     if summary is not None:
         cache_hits["pubmed_summary"] = True
     else:
-        summary = summarize_text(abstracts_text)
+        try:
+            summary = summarize_text(abstracts_text)
+        except GuardrailBlocked as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
         set_cached("pubmed_summary", abstracts_text, value=summary)
 
     web_query = data.description

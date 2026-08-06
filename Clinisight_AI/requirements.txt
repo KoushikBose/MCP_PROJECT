@@ -9,3 +9,4 @@ python-docx
 diskcache
 tavily
 portkey-ai
+nemoguardrails

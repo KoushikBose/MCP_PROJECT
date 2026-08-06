@@ -5,6 +5,7 @@ from functions.summarizer_pubmed import summarize_text
 from functions.pubmed_articles import fetch_pubmed_articles_with_metadata
 from functions.web_search import fetch_web_results
 from functions.cache_store import get_cached, set_cached
+from functions.guardrails import GuardrailBlocked
 
 
 mcp=FastMCP("Clinisight Ai")
@@ -23,7 +24,10 @@ async def clinisight_ai(symptom_text: str):
 
     diagnosis_result = get_cached("diagnosis", symptom_key, symptom_text)
     if diagnosis_result is None:
-        diagnosis_result = get_diagnosis(symptom_text, symptom)
+        try:
+            diagnosis_result = get_diagnosis(symptom_text, symptom)
+        except GuardrailBlocked as exc:
+            return {"error": str(exc)}
         set_cached("diagnosis", symptom_key, symptom_text, value=diagnosis_result)
 
     pubmed_query = " ".join(symptom)
@@ -35,7 +39,10 @@ async def clinisight_ai(symptom_text: str):
     abstracts_text = "\n\n".join(article["abstract"] for article in pubmed_article)[:4000]
     summary = get_cached("pubmed_summary", abstracts_text)
     if summary is None:
-        summary = summarize_text(abstracts_text)
+        try:
+            summary = summarize_text(abstracts_text)
+        except GuardrailBlocked as exc:
+            return {"error": str(exc)}
         set_cached("pubmed_summary", abstracts_text, value=summary)
 
     web_results = get_cached("web_sources", symptom_text)

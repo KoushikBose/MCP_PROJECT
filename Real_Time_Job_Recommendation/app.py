@@ -225,6 +225,10 @@ if not st.session_state.analyzed:
 # --------------------------------------------------------------------------------------
 
 resume_text = st.session_state.resume_text
+if not resume_text:
+    reset_analysis()
+    st.warning("Your analyzed resume data was lost. Please upload your resume and click **Analyze Resume** again.")
+    st.stop()
 word_count = len(resume_text.split())
 reading_time = max(1, round(word_count / 200))
 

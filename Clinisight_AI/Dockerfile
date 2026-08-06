@@ -27,6 +27,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 COPY app.py mcp_tool.py ./
 COPY functions/ ./functions/
 COPY ui/ ./ui/
+COPY guardrails/ ./guardrails/
 
 ########################################################################
 # Runtime — slim image, no build toolchain, non-root user
@@ -41,6 +42,8 @@ RUN apt-get update \
 
 WORKDIR /app
 COPY --from=builder --chown=app:app /app /app
+COPY start.sh ./
+RUN chmod +x start.sh
 
 ENV PATH="/app/.venv/bin:${PATH}" \
     PYTHONUNBUFFERED=1 \
@@ -54,8 +57,10 @@ USER app
 EXPOSE 8081 8501
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl -fsS http://localhost:8081/ || exit 1
+    CMD curl -fsS "http://localhost:${PORT:-8501}/_stcore/health" || exit 1
 
-# Default target: the FastAPI backend. docker-compose.yml overrides `command`
-# for the Streamlit UI and the stdio MCP server, which reuse this same image.
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8081", "--workers", "2"]
+# Default target: FastAPI backend (internal, port 8081) + Streamlit UI
+# (public, $PORT/8501) in one container — see start.sh. docker-compose.yml
+# overrides `command` to run each service (and the stdio MCP server)
+# separately from this same image for local dev.
+CMD ["./start.sh"]

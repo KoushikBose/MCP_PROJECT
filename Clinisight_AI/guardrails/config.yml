@@ -1,0 +1,29 @@
+# NVIDIA NeMo Guardrails configuration for ClinInsight AI.
+#
+# These rails wrap every prompt sent to, and every completion received from,
+# the diagnosis/summarizer LLM calls (see functions/guardrails.py):
+#   - input rail  ("self check input"):  blocks jailbreak / prompt-injection
+#     attempts and off-topic/harmful requests before they ever reach a model.
+#   - output rail ("self check output"): blocks unsafe, non-medical, or
+#     policy-violating completions before they reach the caller.
+#
+# The "main" model below is an NVIDIA-hosted model served via NVIDIA's
+# integrate.api.nvidia.com endpoint (build.nvidia.com), authenticated with
+# NVIDIA_API_KEY from the environment (see .env.example). This is
+# independent of the Portkey fallback chain used for the actual
+# diagnosis/summary generations, so a guardrail check never shares fate with
+# the primary model provider.
+models:
+  - type: main
+    engine: nvidia_ai_endpoints
+    model: meta/llama-3.1-8b-instruct
+
+rails:
+  input:
+    flows:
+      - self check input
+  output:
+    flows:
+      - self check output
+
+streaming: False
