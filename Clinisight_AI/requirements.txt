@@ -1,0 +1,12 @@
+python-dotenv
+beautifulsoup4
+lxml
+requests
+fastapi
+uvicorn
+fpdf2
+python-docx
+diskcache
+tavily
+portkey-ai
+nemoguardrails

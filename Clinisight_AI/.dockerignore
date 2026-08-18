@@ -1,0 +1,33 @@
+# VCS / editor / assistant metadata
+.git
+.github
+.vscode
+.claude
+
+# Python
+.venv
+__pycache__
+*.py[cod]
+*.egg-info
+.pytest_cache
+.mypy_cache
+
+# Runtime data — recreated inside the container, never baked into the image
+.cache
+
+# Secrets — pass at runtime via `--env-file .env` / compose `env_file`, never build-time
+.env
+.env.*
+!.env.example
+
+# Unrelated React frontend — not part of the Python services this image serves
+ClinInsight_AI
+
+# Notebooks / scratch
+functions/Test.ipynb
+.ipynb_checkpoints
+
+# Docker meta-files themselves
+Dockerfile
+docker-compose.yml
+.dockerignore

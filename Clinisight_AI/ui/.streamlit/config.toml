@@ -1,0 +1,64 @@
+# Clinical teal/blue theme for the ClinInsight AI dashboard.
+# Both light and dark variants are defined so viewers can switch modes freely.
+# Structural/typography settings are shared; only colors differ per mode.
+
+[theme]
+showWidgetBorder = true
+showSidebarBorder = true
+baseRadius = "12px"
+buttonRadius = "8px"
+font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+baseFontSize = 15
+baseFontWeight = 400
+linkUnderline = false
+
+[theme.light]
+primaryColor = "#0F766E"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F0FDFA"
+textColor = "#0F172A"
+linkColor = "#0F766E"
+borderColor = "#CBD5E1"
+
+greenColor = "#15803D"
+redColor = "#DC2626"
+orangeColor = "#D97706"
+blueColor = "#2563EB"
+violetColor = "#7C3AED"
+
+dataframeBorderColor = "#CBD5E1"
+dataframeHeaderBackgroundColor = "#F0FDFA"
+
+[theme.light.sidebar]
+backgroundColor = "#F0FDFA"
+secondaryBackgroundColor = "#CCFBF1"
+textColor = "#0F172A"
+borderColor = "#99F6E4"
+primaryColor = "#0F766E"
+
+[theme.dark]
+primaryColor = "#2DD4BF"
+backgroundColor = "#0B1220"
+secondaryBackgroundColor = "#111827"
+textColor = "#E2E8F0"
+linkColor = "#2DD4BF"
+borderColor = "#1F2937"
+
+greenColor = "#4ADE80"
+redColor = "#F87171"
+orangeColor = "#FBBF24"
+blueColor = "#60A5FA"
+violetColor = "#A78BFA"
+
+dataframeBorderColor = "#1F2937"
+dataframeHeaderBackgroundColor = "#111827"
+
+[theme.dark.sidebar]
+backgroundColor = "#0A1418"
+secondaryBackgroundColor = "#0F1F1E"
+textColor = "#E2E8F0"
+borderColor = "#134E4A"
+primaryColor = "#2DD4BF"
+
+[server]
+headless = true
